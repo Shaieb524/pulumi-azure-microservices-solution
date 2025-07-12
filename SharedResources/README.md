@@ -137,3 +137,18 @@ pulumi stack output SqlServerFqdn
 pulumi stack output ContainerRegistryLoginServer
 pulumi stack output ApiManagementServiceUrl
 ```
+
+## 📸 Expected Deployment Result
+
+After successful deployment, your Azure Resource Group should contain the following resources:
+
+![SharedResources Deployment](../docs/shared-resources-rg.png)
+
+This image shows the complete set of Azure resources that should be created by the SharedResources template, including:
+- Resource Group container
+- SQL Server with databases
+- Container Registry
+- API Management service
+- Application Insights (for API Management monitoring)
+
+Use this as a reference to verify your deployment was successful.

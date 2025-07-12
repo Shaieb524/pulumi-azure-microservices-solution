@@ -41,4 +41,4 @@ config:
     - App2Db
   SharedResources:PlanSku.Capacity: "1"
   SharedResources:SqlAdminPassword:
-    secure: AAABAFOv4B0HWkj8RtvqPGlzQVKPGar+5aVJZ216p9HNUmC/FI7z9XeRS3OqfI4=
+    secure: AAABAEx/wc5jfCRoWtvSKkIInbdwq1am4SXtpdruI65d+hW7mHAwkOSH2JDffhcyjw==
