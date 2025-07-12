@@ -6,114 +6,127 @@ Pulumi C# template for deploying shared Azure resources with centralized configu
 
 ### Core Infrastructure Files
 - **`Program.cs`** - Entry point for Pulumi
-- **`pulumi.yaml`** - Project definition
-- **`pulumi.demov2.yaml`** - Stack configuration (location, SKUs, resource names)
+- **`Pulumi.yaml`** - Project definition
+- **`Pulumi.client1-dev.yaml`** - Stack configuration (location, SKUs, resource names)
 - **`SharedResources.csproj`** - C# project file with dependencies
 
 ### Configuration Management
-- **`ConfigParser.cs`** - Utility for parsing YAML config to C# objects
-- **`DeploymentConfigs.cs`** - Main configuration class
-- **`SecretAccess.cs`** - Handles encrypted secrets
+- **`helpers/ConfigParser.cs`** - Utility for parsing YAML config to C# objects
+- **`helpers/DeploymentConfigs.cs`** - Main configuration class
+- **`helpers/SecretAccess.cs`** - Handles encrypted secrets
 
 ### Infrastructure Components
-- **`ContainerizedStack.cs`** - Main stack definition
-- **`ContainerizedStack.SqlServer.cs`** - SQL Server creation
-- **`ContainerizedStack.Databases.cs`** - SQL Database creation
-- **`ContainerizedStack.StorageAccount.cs`** - Storage Account creation
-- **`ContainerizedStack.ContainerRegistry.cs`** - Azure Container Registry
-- **`ContainerizedStack.ApiManagement.cs`** - API Management service
+- **`stack/Stack.cs`** - Main stack definition
+- **`stack/Stack.SqlServer.cs`** - SQL Server creation
+- **`stack/Stack.Databases.cs`** - SQL Database creation
+- **`stack/Stack.ContainerRegistry.cs`** - Azure Container Registry
+- **`stack/Stack.ApiManagement.cs`** - API Management service
 
 ### Setup Scripts
-- **`setup-esc.ps1`** - Creates Pulumi ESC environment for shared config
-- **`add-secrets.ps1`** - Sets encrypted secrets (SQL passwords, etc.)
-
-### Post-Deployment Scripts
-- **`update-esc.ps1`** - Adds Docker Registry credentials to ESC
-- **`update-sql-esc.ps1`** - Adds SQL connection strings to ESC
-- **`update-apim-esc.ps1`** - Adds APIM URLs to ESC
-- **`import-apis-to-apim.ps1`** - Imports APIs from Swagger URLs to APIM
-
-### Test Scripts
-- **`test-*.ps1`** - Scripts to verify deployed resources
+- **`pre-deploy-scripts/setup-pulumi-esc.ps1`** - Creates Pulumi ESC environment for shared config
+- **`pre-deploy-scripts/add-client1-secrets.ps1`** - Sets encrypted secrets (SQL passwords, etc.)
 
 ## 🚀 Getting Started
 
-### 1. Initial Setup
-```powershell
-# Create ESC environment for shared configuration
-.\setup-esc.ps1
+### 1. Create Pulumi Project
+1. **Create new project in Pulumi Cloud**
+   - Navigate to [Pulumi Cloud](https://app.pulumi.com)
+   - Create new project with settings:
+     - **Source**: Pulumi
+     - **Cloud**: Azure
+     - **Language**: C#
+     - **Name**: `<projectname>-<clientname>` (e.g., `proj1-client1`)
 
-# Set secrets (update the password first)
-.\add-secrets.ps1
+2. **Set up stack naming convention**
+   - Stack name format: `<org-name>/<stack-name>`
+   - Where stack name follows: `<clientname>-<env>`
+   - Example: `some-org/proj1-client1/dev`
+
+### 2. Configure Environment
+1. **Update configuration file**
+   - Open `pre-deploy-scripts/client-env-configs.txt`
+   - Populate with values from Pulumi Cloud portal
+   - Include organization name, project name, and environment details
+
+### 3. Set Up ESC Environment
+```powershell
+# Navigate to SharedResources directory
+cd SharedResources
+
+# Navigate to scripts directory
+cd pre-deploy-scripts
+
+# Create ESC environment for shared configuration
+# (requires client-env-configs.txt to be populated)
+.\setup-pulumi-esc.ps1
 ```
 
-### 2. Deploy Infrastructure
+### 4. Configure Secrets
 ```powershell
-# Install dependencies and deploy
+# Return to SharedResources directory
+cd ..
+
+# Set encrypted secrets (update passwords first)
+.\pre-deploy-scripts\add-client1-secrets.ps1
+```
+
+### 5. Deploy Infrastructure
+```powershell
+# Install dependencies
 dotnet restore
+
+# Create stack with naming convention: <org-name>/<clientname>-<env>
+# Example: some-org/client1-dev
+pulumi stack init <org-name>/<clientname>-<env>
+
+# Deploy infrastructure
 pulumi up
 ```
 
-### 3. Post-Deployment Configuration
+### 6. Verify Deployment
 ```powershell
-# Add Docker Registry credentials to ESC
-.\update-esc.ps1
-
-# Add SQL connection strings to ESC  
-.\update-sql-esc.ps1
-
-# Add APIM URLs to ESC
-.\update-apim-esc.ps1
-
-# Import your APIs to APIM (update swagger URLs first)
-.\import-apis-to-apim.ps1
-```
-
-### 4. Test Deployment
-```powershell
-# Test individual services
-.\test-containerregistry.ps1 -RegistryName "proj1registry" -ResourceGroupName "client1-proj1-SharedResources-RG"
-.\test-apimanagement.ps1 -ApiManagementName "proj1-apim" -ResourceGroupName "client1-proj1-SharedResources-RG"
+# Check deployed resources
+pulumi stack output
 ```
 
 ## 📦 What Gets Deployed
 
 ### Azure Resources
 - **Resource Group** - Container for all resources
-- **SQL Server** - Database server with 10 databases
-- **Storage Account** - Blob storage
-- **Container Registry** - Docker image registry
-- **API Management** - API gateway with Application Insights
+- **SQL Server** - Database server with configurable databases (App1Db, App2Db by default)
+- **Container Registry** - Docker image registry with admin access
+- **API Management** - API gateway service
 
 ### ESC Configuration
 Shared configuration available to all projects:
 - Basic settings (Location, Prefix, Tags)
-- Docker Registry credentials
-- SQL connection strings for all databases
-- APIM URLs
+- Resource naming conventions
+- Infrastructure settings and SKUs
+- Database configurations
 
 ## 🔗 Using in Other Projects
 
-Add to any project's `pulumi.yaml`:
+Add to any project's `Pulumi.yaml`:
 ```yaml
 environment:
-  - AHOY2025-org/default/shared-config
+  - proj1-client1/dev
 ```
 
 Then access shared config:
 ```csharp
 var config = new Config("SharedResources");
-var registryUrl = config.Require("DockerSettings:DockerRegistryUrl");
-var sqlConnection = config.RequireSecret("ConnectionStrings:App1Db");
-var apimGateway = config.Require("ApiManagement:GatewayUrl");
+var registryName = config.Require("ResourcesNames:ContainerRegistryName");
+var serverName = config.Require("ResourcesNames:DatabaseServerName");
+var apimName = config.Require("ResourcesNames:ApiManagementName");
 ```
 
 ## ⚙️ Customization
 
-- **Update resource names** in `pulumi.demov2.yaml`
-- **Add new APIs** to `import-apis-to-apim.ps1`
+- **Update resource names** in `Pulumi.client1-dev.yaml`
 - **Modify SKUs/sizes** in configuration files
-- **Add new databases** to the `Databases` array
+- **Add/remove databases** in the `Databases` array
+- **Adjust ESC environment** in `pre-deploy-scripts/setup-pulumi-esc.ps1`
+- **Update secrets** via `pre-deploy-scripts/add-client1-secrets.ps1`
 
 ## 📊 Outputs
 
@@ -122,5 +135,5 @@ After deployment, get outputs with:
 pulumi stack output  # See all outputs
 pulumi stack output SqlServerFqdn
 pulumi stack output ContainerRegistryLoginServer
-pulumi stack output ApiManagementGatewayUrl
+pulumi stack output ApiManagementServiceUrl
 ```
