@@ -1,5 +1,5 @@
 environment:
-  - Proj1Client1/dev
+  - proj1-client1/dev
 config:
   # Plan SKU
   SharedResources:PlanSku:
@@ -40,3 +40,5 @@ config:
     - App1Db
     - App2Db
   SharedResources:PlanSku.Capacity: "1"
+  SharedResources:SqlAdminPassword:
+    secure: AAABAFOv4B0HWkj8RtvqPGlzQVKPGar+5aVJZ216p9HNUmC/FI7z9XeRS3OqfI4=

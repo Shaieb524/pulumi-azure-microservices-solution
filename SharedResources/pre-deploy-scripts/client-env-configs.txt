@@ -1,8 +1,8 @@
 ﻿PulumiOrganization=AHOY2025-org
-PulumiProject=Proj1Client1
-PulumiEnv=prod    
+PulumiProject=proj1-client1
+PulumiEnv=dev    
 
-SharedEnv=client1-Comet-env
+SharedEnv=proj1-client1-env
 ClientName=Client1
 Location=UAENorth
 Prefix=Dev

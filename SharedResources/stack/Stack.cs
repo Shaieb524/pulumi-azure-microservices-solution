@@ -23,9 +23,6 @@ namespace SharedResources
             // 2. SQL Database Server
             var sqlServer = CreateSqlServer(deploymentConfigs, resourceGroup);
 
-            // 3. Storage Account
-            var storageAccount = CreateStorageAccount(deploymentConfigs, resourceGroup);
-
             // 4. Container Registry
             var containerRegistry = CreateContainerRegistry(deploymentConfigs, resourceGroup);
 
@@ -42,7 +39,6 @@ namespace SharedResources
             this.ResourceGroupName = resourceGroup.Name;
             this.SqlServerName = sqlServer.Name;
             this.SqlServerFqdn = sqlServer.FullyQualifiedDomainName;
-            this.StorageAccountName = storageAccount.Name;
             this.ContainerRegistryName = containerRegistry.Name;
             this.ContainerRegistryLoginServer = containerRegistry.LoginServer;
             this.ContainerRegistryUsername = registryUsername;
@@ -59,7 +55,6 @@ namespace SharedResources
         [Output] public Output<string> ResourceGroupName { get; set; }
         [Output] public Output<string> SqlServerName { get; set; }
         [Output] public Output<string> SqlServerFqdn { get; set; }
-        [Output] public Output<string> StorageAccountName { get; set; }
         [Output] public Output<string> ContainerRegistryName { get; set; }
         [Output] public Output<string> ContainerRegistryLoginServer { get; set; }
         [Output] public Output<string> ContainerRegistryUsername { get; set; }
