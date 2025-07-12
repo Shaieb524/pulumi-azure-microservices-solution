@@ -37,7 +37,7 @@ Write-Host "Using format: SharedResources:SecretName" -ForegroundColor Yellow
 try {
     # SQL Server Secrets
     Write-Host "Setting SQL Server secrets..." -ForegroundColor Cyan
-    pulumi config set --secret SharedResources:SqlAdminPassword 'anypassword1234' --secret
+    pulumi config set --secret SharedResources:SqlAdminPassword 'MyStr0ngP@ssw0rd!' --secret
 
     Write-Host ""
     Write-Host "✅ Secrets Setup Complete!" -ForegroundColor Green
