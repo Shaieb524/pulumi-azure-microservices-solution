@@ -142,7 +142,7 @@ pulumi stack output ApiManagementServiceUrl
 
 After successful deployment, your Azure Resource Group should contain the following resources:
 
-![SharedResources Deployment](../docs/shared-resources-rg.png)
+![SharedResources Deployment](../docs/shared-resources-rg-1.png)
 
 This image shows the complete set of Azure resources that should be created by the SharedResources template, including:
 - Resource Group container
