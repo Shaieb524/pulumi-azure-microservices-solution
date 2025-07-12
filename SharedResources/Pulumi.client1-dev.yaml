@@ -1,0 +1,42 @@
+environment:
+  - Proj1Client1/dev
+config:
+  # Plan SKU
+  SharedResources:PlanSku:
+    Capacity: 1
+    Family: B
+    Name: B1
+    Size: B1
+    Tier: Basic
+  # Storage Account Configuration
+  SharedResources:StorageAccount:
+    SkuName: Standard_LRS
+    Kind: StorageV2
+    AccessTier: Hot
+    AllowBlobPublicAccess: false
+    MinimumTlsVersion: TLS1_2
+    EnableHttpsTrafficOnly: true
+  # Container Registry Configuration
+  SharedResources:ContainerRegistry:
+    SkuName: Basic
+    AdminUserEnabled: true
+    PublicNetworkAccess: Enabled
+    ZoneRedundancy: Disabled
+  # Resource Names
+  SharedResources:ResourcesNames:
+    ResourceGroupName: sharedresources-rg
+    DatabaseServerName: proj1-dbserver
+    ContainerRegistryName: proj1registry
+    ApiManagementName: proj1-apim
+    ApiManagementInsightsName: proj1-apim-insights
+  # API Management Configuration
+  SharedResources:ApiManagement:
+    SkuName: Basic # for development/testing
+    SkuCapacity: 1 # Single instance
+    PublisherName: "Dev Team"
+    PublisherEmail: "some@email.com"
+  # Database Names
+  SharedResources:Databases:
+    - App1Db
+    - App2Db
+  SharedResources:PlanSku.Capacity: "1"
