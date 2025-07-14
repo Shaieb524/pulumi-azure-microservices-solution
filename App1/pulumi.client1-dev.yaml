@@ -59,7 +59,7 @@ config:
     HealthCheck: /api/HealthCheck
     IsEncrypted: false
     Values:
-      FUNCTIONS_WORKER_RUNTIME: dotnet
+      key: value
     # Common Settings
     Common:
       ApiKey: "app1-fn-api-key"
