@@ -6,9 +6,9 @@ This repository provides a clean, reusable template for deploying Azure microser
 
 The solution consists of three main components:
 
-- **SharedResources**: Common infrastructure components (SQL Server, API Management, Container Registry, Storage)
-- **App1**: Template microservice with App Service, Function App, Storage, and Event Grid integration
-- **Bounty**: Example microservice implementation demonstrating the template patterns
+- **SharedResources**: Common infrastructure components (SQL Server, API Management, Container Registry)
+- **App1**: Clean template microservice with App Service, Function App, Storage, and Event Grid integration
+- **App2**: Second template microservice demonstrating the reusable template patterns
 
 ## Project Structure
 
@@ -16,33 +16,45 @@ The solution consists of three main components:
 BackendInfra.sln
 ├── SharedResources/              # Shared infrastructure components
 │   ├── stack/                    # Infrastructure stack definitions
-│   │   ├── ContainerizedStack.cs
-│   │   ├── ContainerizedStack.ApiManagement.cs
-│   │   ├── ContainerizedStack.ContainerRegistry.cs
-│   │   ├── ContainerizedStack.Databases.cs
-│   │   ├── ContainerizedStack.SqlServer.cs
-│   │   └── ContainerizedStack.StorageAccount.cs
+│   │   ├── Stack.cs
+│   │   ├── Stack.ApiManagement.cs
+│   │   ├── Stack.ContainerRegistry.cs
+│   │   ├── Stack.Databases.cs
+│   │   └── Stack.SqlServer.cs
 │   ├── helpers/                  # Configuration and utility classes
 │   │   ├── ConfigParser.cs
 │   │   ├── DeploymentConfigs.cs
 │   │   └── SecretAccess.cs
 │   ├── pre-deploy-scripts/       # Pre-deployment automation
+│   │   ├── setup-pulumi-esc.ps1
+│   │   └── add-secrets.ps1
 │   └── post-deploy-scripts/      # Post-deployment automation
-├── App1/                         # Template microservice
+│
+├── App1/                         # Template microservice (clean template)
 │   ├── stack/                    # Service-specific infrastructure
 │   │   ├── App1Stack.cs
 │   │   ├── App1Stack.App1ApiAppService.cs
 │   │   ├── App1Stack.App1FunctionApp.cs
 │   │   ├── App1Stack.App1StorageAccount.cs
-│   │   └── App1Stack.App1EventGrid.cs
-│   └── helpers/                  # Service configuration helpers
-│       ├── App1DeploymentConfigs.cs
-│       └── App1SecretAccess.cs
-└── Bounty/                       # Example implementation
-    ├── stack/                    # Bounty-specific infrastructure
-    ├── helpers/                  # Bounty configuration helpers
-    ├── pre-deploy-scripts/       # Bounty pre-deployment scripts
-    └── post-deploy-scripts/      # Bounty post-deployment scripts
+│   │   └── App1Stack.App1EventsEventGrid.cs
+│   ├── helpers/                  # Service configuration helpers
+│   │   ├── App1DeploymentConfigs.cs
+│   │   └── App1SecretAccess.cs
+│   └── pre-deploy-scripts/       # Service setup scripts
+│       └── add-secrets.ps1
+│
+└── App2/                         # Second template microservice
+    ├── stack/                    # Service-specific infrastructure
+    │   ├── App2Stack.cs
+    │   ├── App2Stack.App2ApiAppService.cs
+    │   ├── App2Stack.App2FunctionApp.cs
+    │   ├── App2Stack.App2StorageAccount.cs
+    │   └── App2Stack.App2EventsEventGrid.cs
+    ├── helpers/                  # Service configuration helpers
+    │   ├── App2DeploymentConfigs.cs
+    │   └── App2SecretAccess.cs
+    └── pre-deploy-scripts/       # Service setup scripts
+        └── add-secrets.ps1
 ```
 
 ## Features
@@ -50,11 +62,10 @@ BackendInfra.sln
 ### Shared Infrastructure
 - **API Management**: Centralized API gateway with policies and security
 - **Container Registry**: Docker image hosting for microservices
-- **SQL Server**: Shared database server with individual service databases
-- **Storage Accounts**: Centralized blob storage and table storage
+- **SQL Server**: Shared database server with individual service databases (App1Db, App2Db by default)
 - **Application Insights**: Unified monitoring and logging
 
-### Microservice Template (App1)
+### Microservice Templates (App1 & App2)
 - **App Service**: Containerized web API with auto-scaling
 - **Function App**: Event-driven serverless functions
 - **Storage Account**: Service-specific blob and table storage
@@ -100,18 +111,29 @@ BackendInfra.sln
    cd ../App1
    pulumi stack init <environment-name>
    pulumi up
+   
+   # Deploy App2 (optional - second template example)
+   cd ../App2
+   pulumi stack init <environment-name>
+   pulumi up
    ```
 
 ### Creating a New Microservice
 
-1. **Copy the App1 template**
+Both App1 and App2 serve as clean templates. Choose either one as your starting point:
+
+1. **Copy a template**
    ```bash
+   # Use App1 template
    cp -r App1 YourServiceName
+   
+   # Or use App2 template
+   cp -r App2 YourServiceName
    ```
 
 2. **Update project files**
-   - Rename `App1.csproj` to `YourServiceName.csproj`
-   - Update namespace references from `App1` to `YourServiceName`
+   - Rename `App1.csproj` (or `App2.csproj`) to `YourServiceName.csproj`
+   - Update namespace references from `App1` (or `App2`) to `YourServiceName`
    - Modify `pulumi.yaml` project name
 
 3. **Configure service-specific settings**
@@ -130,30 +152,29 @@ BackendInfra.sln
 
 ### Environment Files
 Each service includes environment-specific YAML files:
-- `pulumi.<environment-name>.yaml`: Environment-specific configuration
+- `pulumi.client1-dev.yaml`: Environment-specific configuration
 - `Pulumi.yaml`: Project definition and runtime settings
 
 ### Secrets Management
 Sensitive configuration is handled through:
-- Azure Key Vault integration
+- Pulumi ESC (Environment, Secrets, Configuration)
 - Pulumi secret configuration
 - Environment-specific secret files
 
 ### Resource Naming
 Resources follow a consistent naming pattern:
-- Format: `{prefix}-{service}-{resource}-{environment}-{suffix}`
-- Example: `myapp-app1-webapp-dev-001`
+- Format: `{client}-{prefix}-{resource}-{environment}`
+- Example: `client1-dev-app1-webapp`
 
 ## Deployment Scripts
 
 ### Pre-deployment
-- **setup-esc.ps1**: Configure Pulumi ESC (Environment, Secrets, Configuration)
-- **add-secrets.ps1**: Add required secrets to configuration
+- **setup-pulumi-esc.ps1**: Configure Pulumi ESC (Environment, Secrets, Configuration)
+- **add-client1-secrets.ps1**: Add required secrets to configuration
 
 ### Post-deployment
 - **update-app-settings.ps1**: Configure application settings
-- **import-apis-to-apim.ps1**: Register APIs with API Management
-- **move-acr-repos.ps1**: Organize container registry repositories
+- **update-function-settings.ps1**: Configure function app settings
 
 ## Best Practices
 
@@ -167,9 +188,16 @@ Resources follow a consistent naming pattern:
 ## Support
 
 For questions and issues:
-1. Check the documentation in each project folder
-2. Review the example implementation in the Bounty project
+1. Check the documentation in each project folder (README.md files)
+2. Review the clean template implementations in App1 and App2
 3. Consult Pulumi and Azure documentation for specific resource configuration
+
+## Template Comparison
+
+- **App1**: Clean template with minimal configuration
+- **App2**: Second clean template demonstrating reusability  
+
+These templates provide flexible starting points for new microservices with consistent patterns and best practices.
 
 ## License
 
