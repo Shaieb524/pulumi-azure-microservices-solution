@@ -1,4 +1,4 @@
-﻿environment:
+environment:
   - proj1-client1/dev
 config:
   # Docker Settings (non-sensitive only)
@@ -18,9 +18,7 @@ config:
     App2FnAppName: app2-functions
     App2FnAppInsightsName: app2-functions-insights
     App2FnStorageAccountName: app2fnsa
-
   # Storage Account Configuration
-
   App2Infrastructure:StorageAccount:
     SkuName: Standard_LRS
     Kind: StorageV2
@@ -38,19 +36,24 @@ config:
   App2Infrastructure:App2ApiAppSettings:
     HealthCheck: /health
     # Basic Settings
+
     DisableHttpsRedirection: false
     AllowedHosts: "*"
     # App2 Events
+
     App2Events:
       topicEndpoint: "https://client1-dev-app2-someevent.eventgrid.azure.net/api/events"
     # Storage Settings
+
     StorageSettings:
       SupportedAppsVersionsFile: "app2versions/versions.json"
     # Common Settings
+
     Common:
       ApiKey: "app2-api-key"
       TimeoutInMinutes: 30
     # Service Icons Options
+
     ServiceIconsOptions:
       IconPath: "/icons"
       DefaultIcon: "default.png"
@@ -60,6 +63,27 @@ config:
     Values:
       key: value
     # Common Settings
+
     Common:
       ApiKey: "app2-fn-api-key"
       TimeoutInMinutes: 30
+  App2Infrastructure:ApiKey:
+    secure: AAABAI6cmXMClaKgwev7Wsy2x1FI5+Tt+PTakc/jxgVurmz0K9+MhgswJQxOXa4wgQ==
+  App2Infrastructure:PrimaryBlobAccountKey:
+    secure: AAABABgTJE0Pw2q2QQKyqRzSQl5JuDQLQHaEuDWATmennDIIJlYQMLtW8kflDlHD870OkmiIixDnUg==
+  App2Infrastructure:SecondaryBlobAccountKey:
+    secure: AAABAJRpdsTFq6EVFmIBLeV0upCvAoTZZyNTJWCXma9oQKDg5sNXzo2BI+gDYNE1Oxt+rxRkThOEHAAd
+  App2Infrastructure:App2BlobAccountKey:
+    secure: AAABAP161kYH3K3hHPvKaznI3Bbpv0UBwR4RiKTxPCcQyoWrUCHF6NJEVVc9K27enU+0zmAFpw==
+  App2Infrastructure:App2FnStorageKey:
+    secure: AAABAJ9+OIA+Zq6Z3vH2xnDP8YHhRLAPC3joF4PIaMuy1fx7PUopsxtVaU3VSRF4iqeWzcU/El4dDCwQZQ==
+  App2Infrastructure:App2EventsTopicKey:
+    secure: AAABADMH6PYlvnm2kRM0Sld5PU4rvbDyAZMHFcOyo+cCcpE7l348OKta6PAuxKAOX2ghvn654uF8qnr4sNYR
+  App2Infrastructure:SendGridKey:
+    secure: AAABANe7hm/ZquhCNX7Z/xj85LX0jjfVLd9F+Av5TKu83NRDsTEi86GtiqpppJX1iJ6y/Urm
+  App2Infrastructure:PrimaryBlobKey:
+    secure: AAABAB3UL+ZptpDx1gWOZhBf286QBOCNV+Ca1kTriF6djsr/pByjCyAmsfnISlt8E/DD7AUspwnmxA==
+  App2Infrastructure:SecondaryBlobKey:
+    secure: AAABAMv5kPwfXcVVgU5wKfs8Rqt3Urf5mTpdH/xGOuGZqBMVaXUnYuVglhjOj4z9UjUpMOEK7jlWcFfA
+  App2Infrastructure:App2BlobKey:
+    secure: AAABAJa90gqCe0/FaIa/3xA2Y5nJgW/faHdHF2KW8vqFQoUx1wwj18MJcL3hCCCBIJOwWxpRhw==
