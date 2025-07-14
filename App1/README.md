@@ -158,3 +158,18 @@ To use this template for your project:
 5. Update the secret management to match your security requirements
 
 This template provides a solid foundation for Azure microservices infrastructure while remaining flexible and extensible.
+
+## 📸 Expected Deployment Result
+
+After successful deployment, your App1 Resource Group should contain the following resources:
+
+![App1 Deployment](../docs/app1-rg.png)
+
+This image shows the complete set of Azure resources that should be created by the App1 template, including:
+- App Service for the API
+- Function App for event processing
+- Storage Account for blob storage and function requirements
+- Event Grid Topic for event-driven communication
+- Application Insights for monitoring
+
+Use this as a reference to verify your App1 deployment was successful.
