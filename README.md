@@ -202,3 +202,6 @@ These templates provide flexible starting points for new microservices with cons
 ## License
 
 This template is provided under the MIT License. See LICENSE file for details.
+
+More details here:
+https://wellrounded.engineer/azure-infrastructure-templates-that-work-with-ai-my-experience-building-a-reusable-pulumi-solution/
