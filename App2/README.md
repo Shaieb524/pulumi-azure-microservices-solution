@@ -112,3 +112,18 @@ To use this template for your project:
 5. Update the secret management to match your security requirements
 
 This template provides a solid foundation for Azure microservices infrastructure while remaining flexible and extensible.
+
+## 📸 Expected Deployment Result
+
+After successful deployment, your App2 Resource Group should contain the following resources:
+
+![App2 Deployment](../docs/app2-rg.png)
+
+This image shows the complete set of Azure resources that should be created by the App2 template, including:
+- App Service for the API
+- Function App for event processing
+- Storage Account for blob storage and function requirements
+- Event Grid Topic for event-driven communication
+- Application Insights for monitoring
+
+Use this as a reference to verify your App2 deployment was successful.
