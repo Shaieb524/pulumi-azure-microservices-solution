@@ -1,0 +1,65 @@
+﻿environment:
+  - proj1-client1/dev
+config:
+  # Docker Settings (non-sensitive only)
+  App2Infrastructure:DockerSettings:
+    DockerApp2ApiImageName: app2-api
+    DockerApp2ApiImageTag: latest-20250404133552
+    DockerApp2FnImageName: app2-fn
+    DockerApp2FnImageTag: latest-20250404133552
+    # NOTE: DockerRegistryPassword is set via CLI as App2Infrastructure:DockerRegistryPassword
+  # Resource Names
+  App2Infrastructure:ResourcesNames:
+    ResourceGroupName: app2-rg
+    App2ApiAppServicePlanName: app2-apis-plan
+    App2ApiAppServiceName: app2-apis
+    App2ApiAppInsightsName: app2-insights
+    App2FnAppPlanName: app2-functions-plan
+    App2FnAppName: app2-functions
+    App2FnAppInsightsName: app2-functions-insights
+    App2FnStorageAccountName: app2fnsa
+
+  # Storage Account Configuration
+
+  App2Infrastructure:StorageAccount:
+    SkuName: Standard_LRS
+    Kind: StorageV2
+    AccessTier: Hot
+    AllowBlobPublicAccess: false
+    MinimumTlsVersion: TLS1_2
+    EnableHttpsTrafficOnly: true
+  # Database Configuration (extracted from connection strings)
+
+  App2Infrastructure:Database:
+    # Storage accounts
+    PrimaryBlobAccount: client1devprimarysa
+    SecondaryBlobAccount: client1devsecondarysa
+    App2BlobAccount: client1devapp2sa
+  App2Infrastructure:App2ApiAppSettings:
+    HealthCheck: /health
+    # Basic Settings
+    DisableHttpsRedirection: false
+    AllowedHosts: "*"
+    # App2 Events
+    App2Events:
+      topicEndpoint: "https://client1-dev-app2-someevent.eventgrid.azure.net/api/events"
+    # Storage Settings
+    StorageSettings:
+      SupportedAppsVersionsFile: "app2versions/versions.json"
+    # Common Settings
+    Common:
+      ApiKey: "app2-api-key"
+      TimeoutInMinutes: 30
+    # Service Icons Options
+    ServiceIconsOptions:
+      IconPath: "/icons"
+      DefaultIcon: "default.png"
+  App2Infrastructure:App2FnAppSettings:
+    HealthCheck: /api/HealthCheck
+    IsEncrypted: false
+    Values:
+      key: value
+    # Common Settings
+    Common:
+      ApiKey: "app2-fn-api-key"
+      TimeoutInMinutes: 30
