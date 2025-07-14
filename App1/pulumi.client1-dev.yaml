@@ -1,0 +1,86 @@
+environment:
+  - proj1-client1/dev
+config:
+  # Docker Settings (non-sensitive only)
+  App1Infrastructure:DockerSettings:
+    DockerApp1ApiImageName: app1-api
+    DockerApp1ApiImageTag: latest-20250404133552
+    DockerApp1FnImageName: app1-fn
+    DockerApp1FnImageTag: latest-20250404133552
+    # NOTE: DockerRegistryPassword is set via CLI as App1Infrastructure:DockerRegistryPassword
+  # Resource Names
+  App1Infrastructure:ResourcesNames:
+    ResourceGroupName: app1-rg
+    App1ApiAppServicePlanName: app1-apis-plan
+    App1ApiAppServiceName: app1-apis
+    App1ApiAppInsightsName: app1-insights
+    App1FnAppPlanName: app1-functions-plan
+    App1FnAppName: app1-functions
+    App1FnAppInsightsName: app1-functions-insights
+    App1FnStorageAccountName: app1fnsa
+    App1EventsBookingTopicName: app1-someevent
+    App1StorageAccountName: app1sa
+  # Storage Account Configuration
+
+  App1Infrastructure:StorageAccount:
+    SkuName: Standard_LRS
+    Kind: StorageV2
+    AccessTier: Hot
+    AllowBlobPublicAccess: false
+    MinimumTlsVersion: TLS1_2
+    EnableHttpsTrafficOnly: true
+  # Database Configuration (extracted from connection strings)
+
+  App1Infrastructure:Database:
+    # Storage accounts
+    PrimaryBlobAccount: client1devprimarysa
+    SecondaryBlobAccount: client1devsecondarysa
+    App1BlobAccount: client1devapp1sa
+  App1Infrastructure:App1ApiAppSettings:
+    HealthCheck: /health
+    # Basic Settings
+    DisableHttpsRedirection: false
+    AllowedHosts: "*"
+    # App1 Events
+    App1Events:
+      topicEndpoint: "https://client1-dev-app1-someevent.eventgrid.azure.net/api/events"
+    # Storage Settings
+    StorageSettings:
+      SupportedAppsVersionsFile: "app1versions/versions.json"
+    # Common Settings
+    Common:
+      ApiKey: "app1-api-key"
+      TimeoutInMinutes: 30
+    # Service Icons Options
+    ServiceIconsOptions:
+      IconPath: "/icons"
+      DefaultIcon: "default.png"
+  App1Infrastructure:App1FnAppSettings:
+    HealthCheck: /api/HealthCheck
+    IsEncrypted: false
+    Values:
+      FUNCTIONS_WORKER_RUNTIME: dotnet
+    # Common Settings
+    Common:
+      ApiKey: "app1-fn-api-key"
+      TimeoutInMinutes: 30
+  App1Infrastructure:ApiKey:
+    secure: AAABAF9b2RtM321g4P4T8BpO5FEn7Bsf27rngQicOyt+nnpOmUn97Auix6tDbyKGkw==
+  App1Infrastructure:PrimaryBlobAccountKey:
+    secure: AAABANrsifDgRJJq9MuMYmlJGJY2keLpQmZ3Gr+D6SjbiZ052xndmA5ua5GEejw5lN72Nf+7cpDCgg==
+  App1Infrastructure:SecondaryBlobAccountKey:
+    secure: AAABANF72Z2PVZvuQ4VuxeoE5yIIe+2lbHy6C5iknqVjucAVgPpGVU8vbJDI0dK+bDpew+WL0svQu9sn
+  App1Infrastructure:App1BlobAccountKey:
+    secure: AAABAM1XVOOKHzBwkkN3weScbCNIO0Npwdf6CnzD1gXXAg3SoGeT3KG7H4jPcrDKdJES9hRuUQ==
+  App1Infrastructure:App1FnStorageKey:
+    secure: AAABAEQxWsCstNWHpkbrIZFYVcYNQIXEwkx5XXE7Kdp8Y7lQN3J+42H53+utEaMB4Dv5/nEeXBMO78SQIg==
+  App1Infrastructure:App1EventsTopicKey:
+    secure: AAABADMDMPuEXUUIY0UGFi8CiO6UIUf8qGBQDQ2R0jzxlNkEhNAlTMMynmRwJJHjfKRGPLTwg3ald7fqyL2j
+  App1Infrastructure:SendGridKey:
+    secure: AAABAMIODBGpZuwTUrFL+OgBXKLI8a/Ot+s8INopc/Xcc/YXTCbcP1Kau+FowzPpbK40U7B7
+  App1Infrastructure:PrimaryBlobKey:
+    secure: AAABAIcXv1z5u4nAd1qFEUVzt4HUNtLKkJOoOm6qeaQabAJ2DjzqlsLOEWoR0ppZZsNs9+K3U0VS+A==
+  App1Infrastructure:SecondaryBlobKey:
+    secure: AAABAN8ktMQFQgdGtXMa5ACenzNW64o/hL+MeT/4rm0v9Y89JXD+w64ZVVJShx7OGJbqhS4/VJaomHsG
+  App1Infrastructure:App1BlobKey:
+    secure: AAABAPvo8h5RpJ6xobUtfwQX7k5gWA2pNA0x3Pt12UlldmqVEUvksDoD+0CRokcYJCWS4hGmsQ==
