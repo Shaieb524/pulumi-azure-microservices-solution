@@ -1,0 +1,3 @@
+﻿PulumiOrganization=AHOY2025-org
+PulumiProject=proj1-client1
+PulumiEnv=dev   
