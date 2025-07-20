@@ -1,3 +1,5 @@
+https://wellrounded.engineer/azure-infrastructure-templates-that-work-with-ai-my-experience-building-a-reusable-pulumi-solution/
+
 # Azure Microservices Infrastructure Template
 
 This repository provides a clean, reusable template for deploying Azure microservices infrastructure using Pulumi and C#. The template follows modern cloud architecture patterns with shared resources and modular service configurations.
